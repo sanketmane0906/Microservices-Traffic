@@ -1,0 +1,48 @@
+Real-World Microservices Deployment Model :-
+
+        In a real-world scenario, microservices are not deployed on different servers. Instead, they are deployed on the same server or cluster within a private network.
+
+Client Interaction with Microservices :-
+
+        Suppose there are three external clients (C1, C2, and C3) who want to access our microservices.
+        Clients do not call microservices directly.
+        Instead of Client 1 calling the Account microservice, 
+                   Client 2 calling the Card microservice, and 
+                   Client 3 calling the Loan microservice directly, 
+                   they must go through a single entry point.
+
+How Microservices are Accessed :- 
+
+        All microservices are deployed within the same network.
+        A firewall surrounds the microservices to protect them from direct external access.
+        Any external client that wants to access a microservice must go through the API Gateway (Entry Point).
+
+Role of the API Gateway :- 
+
+        Handles security by restricting unauthorized access.
+        Performs non-functional operations like logging, rate-limiting, and authentication.
+        Routes client requests to the correct microservice.
+
+
+
+                          
++------------------------------------------------------+
+|             Microservices Network                    |
+|  +------------+  +------------+  +------------+     |
+|  | Account    |  | Loan       |  | Card       |     |
+|  | Service    |  | Service    |  | Service    |     |
+|  +------------+  +------------+  +------------+     |
++------------------------------------------------------+
+                          |
++------------------------------------------------------+
+|                   Firewall                           |
++------------------------------------------------------+
+                           |
++------------------------------------------------------+
+|                   API Gateway                        |   using this gateway we can manage authetication and authorization also logging and other things also
+|                (Entry Point)                         |
++------------------------------------------------------+
+           |                |                |
+    +------------+   +------------+   +------------+
+    | Client 1   |   | Client 2   |   | Client 3   |
+    +------------+   +------------+   +------------+
