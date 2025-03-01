@@ -1,0 +1,59 @@
+how a traditional load balancer works:-
+
+                   +---------------------+
+                   |     Client (User)   |
+                   +---------------------+
+                             |
+                             | Request
+                             v
+                   +---------------------+
+                   |   Load Balancer     |
+                   +---------------------+
+                      /       |       \
+        -------------+        |        +-------------
+       |                     |                      |
+       v                     v                      v
++----------------+    +----------------+    +----------------+
+|  Server 1      |    |  Server 2      |    |  Server 3      |
+|  (Healthy)     |    |  (Healthy)     |    |  (Unhealthy)   |
++----------------+    +----------------+    +----------------+
+        |                    |  
+        | Response           | Response
+        v                    v
++---------------------+  +---------------------+
+|  Database 1        |  |  Database 2        |
++---------------------+  +---------------------+
+
+
+Explanation:
+
+  The client (user) sends a request.
+  The load balancer receives the request and checks the health of backend servers.
+  It distributes the request based on the load balancing algorithm (e.g., Round Robin, Least Connections).
+  If a server is unhealthy, it is skipped.
+  The selected server processes the request and may retrieve data from a database.
+  The response is sent back to the client.
+
+Limitations of Traditional Load Balancers :-
+
+  Limited Scalability – Scaling requires adding more physical or virtual load balancers, which can be costly and complex.
+
+  Single Point of Failure (SPOF) – If the load balancer itself fails, the entire system may become inaccessible unless a backup or failover mechanism is in place.
+
+  Static Configuration – Traditional load balancers often require manual configuration, making it difficult to dynamically adjust to traffic spikes.
+  
+  Health Check Delays – Some traditional load balancers take time to detect and remove failed servers from the pool, affecting performance.
+
+  Geographical Limitations – They may not efficiently handle traffic across multiple regions, leading to latency issues for global users.
+
+  No Intelligent Traffic Routing – They usually distribute traffic based on simple algorithms (e.g., Round Robin, Least Connections) and don’t optimize for request types or server capabilities.
+
+  Security Concerns – Traditional load balancers do not inherently provide security features like DDoS protection, WAF (Web Application Firewall), or bot mitigation.
+
+  Lack of Application Awareness – They work at lower network layers (L4 or L7) and may not fully understand application-layer behavior, leading to inefficient routing.
+
+  High Operational Costs – Physical load balancers require maintenance, and even virtual ones may have licensing costs.
+
+  Not Ideal for Cloud-Native Applications – They struggle to efficiently manage microservices, containerized workloads, or dynamic cloud environments compared to modern cloud-based load balancers.
+
+  
