@@ -1,0 +1,64 @@
+Client-Side Service Discovery :-
+
+   Applications need to register themselves into a service registry while starting.
+   They also need to deregister when shutting down, either by adding or removing details.
+
+          +-----------------+
+         | Service Registry | -----------------------------| Registers them
+         +-----------------+                               |
+                |                                ________________________
+                |                               |                        |
+                |                     +-----------------+       +-----------------+
+                |                     |   Loan Service  |       |   Loan Service  |
+                |                    |  127.56.37.23   |       |  127.51.37.25   |
+                |                     +-----------------+       +-----------------+
+                |                                                       |
+                | Response or list of IP addresses                      |
+                                                                        |
+         +----------------+                                             |
+         |  Accounts      |                                             |
+         | (Client asks   | ---------------------------------------------
+         |  for Loan service) |   based on less load account service select one
+         +----------------+
+
+    In the previous diagram, we saw how the service registry stores the addresses of the loan services.
+    When the Accounts service requests a loan service, it receives a list of available loan service instances and selects one for communication.
+
+Developer Responsibilities in Client-Side Service Discovery:=
+
+    The developer has to maintain the list of all available services.
+    They need to handle service failures by updating or removing failed instances.
+    Load balancing is handled inside the client, choosing the best instance dynamically.
+    Developers should take care of communication failures and retry mechanisms.
+
+
+    
+
+    +--------------------------------------------------+
+|    overallbank.in/account   overallbank.in/loan   overallbank.in/card |
+|          (Service Instances)                     |
++--------------------------------------------------+
+           |                   |                    |
+           |                   |                    |
++--------------------------------------------------+
+|     Service Discovery Node 1 --- Service Discovery Node 2 --- Service Discovery Node 3 |                         here each node is communicating with each other
+|        (Handles service registration & lookup)                                      |
++--------------------------------------------------+
+           |                   |                    |
+           |                   |                    |
++--------------------------------------------------+
+|          Account         Loan         Card        |
+|     (Client Services interacting with services) |
++--------------------------------------------------+
+
+
+In the last diagram, manual registration of services is not required.
+                     Each service registers itself with the service registry.
+                     Every service discovery node communicates with other nodes.
+                     IP addresses are shared among all nodes, making service discovery efficient.
+                     One important thing: We don’t need to call services by their IP address.
+                     Instead, we can call a service using its DNS name.
+
+
+      
+
