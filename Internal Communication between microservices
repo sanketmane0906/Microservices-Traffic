@@ -1,0 +1,91 @@
+Steps to Enable Internal Communication Between Microservices Using Feign Client
+      
+    Step 1: Add OpenFeign Dependency
+            Add the Feign Client dependency to your microservice's pom.xml:
+
+              <dependency>
+                  <groupId>org.springframework.cloud</groupId>
+                  <artifactId>spring-cloud-starter-openfeign</artifactId>
+              </dependency>
+
+    Step 2: Enable Feign Clients in the Main Class
+            In the main class of the microservice, add the @EnableFeignClients annotation to enable Feign communication:
+
+            package com.example.microservice;
+
+            import org.springframework.boot.SpringApplication;
+            import org.springframework.boot.autoconfigure.SpringBootApplication;
+            import org.springframework.cloud.openfeign.EnableFeignClients;
+
+            @SpringBootApplication
+            @EnableFeignClients  // Enables Feign Clients
+            public class MicroserviceApplication {
+                public static void main(String[] args) {
+                      SpringApplication.run(MicroserviceApplication.class, args);
+                }
+            }
+
+    Step 3: Create a Package for Feign Clients
+            Inside your microservice, create a new package named:
+
+                  in.microservicename.clients
+
+              For example, in an Account Microservice, the package would be:
+
+                  in.accountservice.clients
+
+    Step 4: Create a Feign Client Interface
+            Inside the clients package, create an interface named {MicroserviceName}FeignClient.
+
+            For example, if your Account Microservice wants to communicate with the Card Microservice, create CardServiceFeignClient.java:
+
+            package in.accountservice.clients;
+
+            import org.springframework.cloud.openfeign.FeignClient;
+            import org.springframework.web.bind.annotation.GetMapping;
+            import org.springframework.web.bind.annotation.RequestParam;
+            import org.springframework.http.ResponseEntity;
+            import in.accountservice.dto.CardsDto;
+
+            @FeignClient(name = "CARD-SERVICE")  // Name of the registered microservice in Eureka
+            public interface CardServiceFeignClient {
+
+                @GetMapping("/api/fetch")
+                ResponseEntity<CardsDto> fetchCardDetails(@RequestParam String mobileNumber);
+            }
+
+          The @FeignClient(name = "CARD-SERVICE") annotation specifies the registered name of the Card microservice in Eureka Service Discovery.
+          The method signature must match the endpoint in the target microservice.
+
+    Step 5: Use the Feign Client in Your Service or Controller
+            Inject the Feign Client into your service or controller to call the other microservice.
+
+            package in.accountservice.controller;
+
+            import in.accountservice.clients.CardServiceFeignClient;
+            import in.accountservice.dto.AccountResponse;
+            import in.accountservice.dto.CardsDto;
+            import org.springframework.web.bind.annotation.*;
+            import org.springframework.http.ResponseEntity;
+            import org.springframework.beans.factory.annotation.Autowired;
+
+            @RestController
+            @RequestMapping("/api/accounts")
+            public class AccountController {
+
+                  @Autowired
+                  private CardServiceFeignClient cardServiceFeignClient;
+
+                  @GetMapping("/details")
+                  public ResponseEntity<AccountResponse> fetchAccountDetails(@RequestParam String mobileNumber) {
+        
+                          ResponseEntity<CardsDto> cardResponse = cardServiceFeignClient.fetchCardDetails(mobileNumber);
+
+                           AccountResponse response = new AccountResponse();
+                           response.setMobileNumber(mobileNumber);
+                           response.setCardDetails(cardResponse.getBody());
+
+                           return ResponseEntity.ok(response);
+                   }
+          }
+
