@@ -1,0 +1,8 @@
+Sometimes, the Eureka server goes into self-preservation mode. Every service sends a heartbeat to the Eureka server at regular intervals. 
+If a service stops sending heartbeats, the Eureka server assumes that the service has crashed or become unresponsive. However, this might also happen due to network issues.
+This behavior helps the Eureka server maintain an up-to-date registry. When it does not receive a heartbeat, the Eureka server unregisters the service from the registry.
+
+How to Prevent False Alarms: :- 
+
+    When such a situation occurs, the Eureka server enters self-preservation mode. When this mode is active, the Eureka server does not make changes to the service registry immediately, preventing unnecessary removals due to temporary network issues.
+
