@@ -1,0 +1,11 @@
+Spring Cloud Gateway :-
+      We can use it to create an Edge Server for our microservices architecture.
+      It handles any amount of workload by scaling horizontally.
+      Consumes less memory compared to traditional API gateways.
+      Built on a reactive framework (Spring WebFlux), making it non-blocking and highly efficient.
+
+How It Works
+    Acts as a gatekeeper for all incoming traffic, routing requests to appropriate microservices.
+    Handles non-functional requirements like security, rate limiting, logging, and monitoring.
+    Manages cross-cutting concerns such as authentication, authorization, and request transformations.
+    It's not a separate server, but rather a library that we integrate into a Spring Boot application.
