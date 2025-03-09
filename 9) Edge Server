@@ -1,0 +1,29 @@
+Edge Server :-
+
+It is also called as a API Gateway which mean it is single point from where all external commumnication can happen.
+
+🔥 What Can an Edge Server Do?
+
+    1️⃣ Routing & Load Balancing
+      Directs incoming requests to the correct microservice.
+      Works with Eureka Server for dynamic service discovery.
+      Supports client-side load balancing (e.g., lb://SERVICE-NAME).
+    2️⃣ Security & Authentication
+      Enforces OAuth2, JWT, or API key-based authentication.
+      Can act as an Identity Provider for single sign-on (SSO).
+      Blocks unauthorized requests before they reach microservices.
+    3️⃣ Rate Limiting & Throttling
+      Prevents DDoS attacks and abuse by limiting requests per second.
+      Example: Allowing only 100 requests per minute per user.
+    4️⃣ Resilience & Fault Tolerance
+      Uses Circuit Breakers (Resilience4j/Hystrix) to prevent cascading failures.
+      Implements retries and fallback mechanisms for failed requests.
+    5️⃣ Request/Response Transformation
+      Modifies headers, parameters, or payloads before passing requests.
+      Converts XML to JSON or vice versa if needed.
+    6️⃣ Logging & Monitoring
+      Tracks all requests passing through the gateway.
+      Works with Zipkin, Sleuth, ELK Stack for tracing.
+    7️⃣ CORS & API Versioning
+      Handles CORS (Cross-Origin Resource Sharing) for frontend apps.
+      Supports API versioning (/api/v1/orders, /api/v2/orders).
