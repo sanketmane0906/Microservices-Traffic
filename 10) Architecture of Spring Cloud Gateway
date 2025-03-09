@@ -1,0 +1,62 @@
+Architecture of Spring Cloud Gateway :-
+
+                     +------------------------------------------------+
+                     |          SPRING CLOUD GATEWAY                  |
+                     |------------------------------------------------|
+                     |  1️⃣ GATEWAY HANDLER MAPPING                    |
+                     |  - Maps incoming requests to routes            |
+                     |------------------------------------------------|
+                     |  2️⃣ ROUTE LOCATOR                              |
+                     |  - Defines available routes dynamically        |
+                     |------------------------------------------------|
+                     |  3️⃣ PREDICATES                                 |
+                     |  - Evaluates conditions to match a route       |
+                     |  - Example: Path=/orders/**, Method=GET        |
+                     |------------------------------------------------|
+                     |  4️⃣ FILTER CHAIN                               |
+                     |  - Executes request/response filters           |
+                     |    +--------------------------+               |
+                     |    |  PRE-FILTERS            | (Modify request)|
+                     |    |  - Add headers          |                |
+                     |    |  - Authentication       |                |
+                     |    |  - Logging              |                |
+                     |    +--------------------------+               |
+                     |    |  FORWARD TO MICROSERVICE |               |
+                     |    +--------------------------+               |
+                     |    |  POST-FILTERS           | (Modify response)|
+                     |    |  - Add response headers |                |
+                     |    |  - Transform response   |                |
+                     |    |  - Logging              |                |
+                     |    +--------------------------+               |
+                     |------------------------------------------------|
+                     |  5️⃣ NETTY SERVER (Reactive Framework)          |
+                     |  - Handles non-blocking requests asynchronously|
+                     +------------------------------------------------+
+                                |                  
+        ----------------------------------------------------
+        |                      |                          |
+        v                      v                          v
++----------------+    +----------------+    +----------------+
+| ORDER-SERVICE  |    | USER-SERVICE   |    | PAYMENT-SERVICE |
+| (Microservice) |    | (Microservice) |    | (Microservice)  |
++----------------+    +----------------+    +----------------+
+
+
+1️⃣ Gateway Handler Mapping
+    It maps incoming requests to a specific route.
+    Uses RouteLocator to define routes dynamically.
+    Ensures each request is forwarded to the appropriate microservice.
+    🔹 Example:
+        When a request hits http://localhost:8080/orders/123, the handler mapping ensures it is routed to the Order Service.
+
+2️⃣ Predicates (Condition-Based Routing)
+    Predicates define conditions that determine whether a route should be executed.
+    Based on request headers, query params, method types, time-based conditions, etc.
+
+3️⃣ Pre-Filters (Before the Request Reaches the Microservice)
+    Pre-Filters modify requests before they are sent to microservices.
+    Can add headers, transform request body, authenticate requests, etc.
+
+4️⃣ Post-Filters (After the Response is Returned from Microservice)
+    Post-Filters modify responses after they are processed by the microservice.
+    Can log responses, modify headers, change response body, etc.
