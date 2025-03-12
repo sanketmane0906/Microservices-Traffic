@@ -1,0 +1,55 @@
+If you want to create your own cutome routes then there are 2 ways 
+
+1) using .yml file
+2) using java configuration
+
+I recommend go with java configuration becauseit given you a lot of advantages
+
+@Bean
+	public RouteLocator swedishbankRouteConfig(RouteLocatorBuilder builder)
+	{
+		return builder.routes()
+				              .route(p->p.path("/swedishbank/accounts/**") //if url satrts with the swedishbank/accounts then use this route
+				              .filters(f->f.rewritePath("/swedishbank/accounts/(?<segment>.*)","/${segment}"))//in filter before sending request to miccroservice rewritesPath() removen /swedishbank/accounts
+				              .uri("lb://ACCOUNTS")) //destination -the request is sended to account miceroservice using load balancer lb is load balacer
+				              
+				              .route(p->p.path("/swedishbank/cards/**")
+						      .filters(f->f.rewritePath("/swedishbank/cardss/(?<segment>.*)","/${segment}"))
+						      .uri("lb://CARDS"))
+				              
+				              .route(p->p.path("/swedishbank/loans/**")
+						      .filters(f->f.rewritePath("/swedishbank/loans/(?<segment>.*)","/${segment}"))
+						      .uri("lb://LOANS")).build();
+	}
+
+ I have created my own routes for my own services 
+
+ Lets explain what it means 
+
+ Explanation:
+Route Locator:
+The @Bean annotation registers a method as a Spring Bean.
+The RouteLocatorBuilder helps build routing rules for API Gateway.
+
+Routing Logic:
+The routes() method defines multiple routes.
+Each route() method specifies a condition (path()) and a destination (uri()).
+
+Routes Breakdown
+1st Route: Accounts Service
+
+.route(p -> p.path("/swedishbank/accounts/**")
+      .filters(f -> f.rewritePath("/swedishbank/accounts/(?<segment>.*)", "/${segment}"))
+      .uri("lb://ACCOUNTS"))
+
+Condition:
+
+If the URL starts with /swedishbank/accounts/, this route will be used.
+Rewrite Path: Removes /swedishbank/accounts/ from the URL before forwarding it.
+Example:
+Request: /swedishbank/accounts/123
+Forwarded as: /123
+Destination: Sends request to ACCOUNTS microservice (using service discovery with Load Balancer).
+
+
+
