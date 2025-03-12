@@ -1,0 +1,23 @@
+When you create gateway server with 
+
+cloud: 
+  gateway: 
+    discovery: 
+      locator: 
+        enables: true 
+
+Then it will give you the default routes by using service Id
+
+if you want to check set this property to true and go to the  
+
+localhost:8072/actuator/gateway/routes  it gives default routes from eurekaserver
+
+and if you see the routes all service names are in uppervase letters if you want to set it to lowercase use following prperty
+
+cloud: 
+  gateway: 
+    discovery: 
+      locator: 
+        lowerCaseServiceId: true 
+
+now you can use in lowercase 
