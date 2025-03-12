@@ -1,0 +1,29 @@
+If we want in response header the current date and time of response then we can add the filer which is
+
+.addResponseFilter() 
+
+There are multiple filters are present like JsonToGRPC conversion filter addRequestHeader() filter and many more
+
+if you want to add thsi then 
+
+follow following colde 
+
+@Bean
+	public RouteLocator swedishbankRouteConfig(RouteLocatorBuilder builder)
+	{
+		return builder.routes()
+				              .route(p->p.path("/swedishbank/accounts/**") //if url satrts with the swedishbank/accounts then use this route
+				              .filters(f->f.rewritePath("/swedishbank/accounts/(?<segment>.*)","/${segment}")//in filter before sending request to miccroservice rewritesPath() removen /swedishbank/accounts
+				            		  .addResponseHeader("X-Response-Time", LocalDateTime.now().toString()))//this is addResponseFilter which gives the time in response
+				              .uri("lb://ACCOUNTS")) //destination -the request is sended to account miceroservice using load balancer lb is load balacer
+				              
+				              .route(p->p.path("/swedishbank/cards/**")
+						      .filters(f->f.rewritePath("/swedishbank/cardss/(?<segment>.*)","/${segment}")
+						    		  .addResponseHeader("X-Response-Time", LocalDateTime.now().toString()))
+						      .uri("lb://CARDS"))
+				              
+				              .route(p->p.path("/swedishbank/loans/**")
+						      .filters(f->f.rewritePath("/swedishbank/loans/(?<segment>.*)","/${segment}")
+						    		  .addResponseHeader("X-Response-Time", LocalDateTime.now().toString()))
+						      .uri("lb://LOANS")).build();
+	}
