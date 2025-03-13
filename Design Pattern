@@ -1,0 +1,15 @@
+Gateway Offloading Pattern :-
+
+    If your edge server is capable of handling cross-cutting concerns like security, monitoring, and rate limiting, then it follows the Gateway Offloading Pattern.
+    The backend services remain focused on business logic while the gateway takes care of these common concerns.
+
+Backend for Frontend (BFF) Pattern :-
+    In this pattern, multiple edge servers are used, each dedicated to a specific client type.
+    The Web application will have its own edge server.
+    The Mobile application (Android/iOS) will have its own separate edge server.
+    Each edge server customizes API responses as per the needs of the respective client, improving performance and reducing unnecessary data transfer.
+
+Composition Pattern :-
+    Sometimes, a client requires data from multiple backend services. 
+    Instead of making separate API calls and aggregating data on the client side, the edge server (API gateway) retrieves data from multiple backend services, combines the responses, and sends a single response to the client. 
+    This reduces the number of client requests and improves efficiency.
